@@ -62,11 +62,12 @@ export const generateMap = (dimensions, maxTunnels, maxLength) => {
   return map
 }
 
-export const createMapWithKey = (dimensions, maxTunnels, maxLength) => {
+export const createMapWithAssets = (dimensions, maxTunnels, maxLength) => {
   let map = generateMap(dimensions, maxTunnels, maxLength)
   var currentRow
   var currentColumn
   var max_eggs = 10
+  // create egg spawn points
   while (max_eggs > 0) {
     do {
       currentRow = Math.floor(Math.random() * (map.length - 1))
@@ -77,6 +78,15 @@ export const createMapWithKey = (dimensions, maxTunnels, maxLength) => {
     map[currentRow][currentColumn] = 2
     max_eggs--
   }
+  // create door spawn point
+  do {
+    currentRow = Math.floor(Math.random() * (map.length - 1))
+    currentColumn = Math.floor(Math.random() * (map.length - 1))
+    var randomSpot = map[currentRow][currentColumn]
+    var spotBelowRandom = map[currentRow + 1][currentColumn]
+  } while (randomSpot === 1 || spotBelowRandom === 0 || spotBelowRandom === 2)
+  map[currentRow][currentColumn] = 3
+  console.log(map)
   return map
 }
 const chooseRandomDirection = (directions, lastDirection) => {

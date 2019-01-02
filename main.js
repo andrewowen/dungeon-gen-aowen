@@ -1,4 +1,4 @@
-import { createMapWithKey } from './createMap.js'
+import { createMapWithAssets } from './createMap.js'
 import { handleMovement } from './helpers.js'
 import { createChickenAnimations } from './animations.js'
 
@@ -21,15 +21,20 @@ const config = {
   },
   resolution: window.devicePixelRatio
 }
+const game = new Phaser.Game(config)
 const DIMENSIONS = 32
 const MAX_TUNNELS = 200
 const MAX_LENGTH = 5
 
+let map
+let worldLayer
 let eggsCollected = 0
 let totalScore = 0
-const game = new Phaser.Game(config)
 let scoreText
 let chicken
+let door = {}
+let doorX
+let doorY
 let eggs = []
 let eggSprite
 let cursors
@@ -41,17 +46,18 @@ function preload() {
     frameHeight: 16
   })
   this.load.image('egg', '/assets/egg.png')
+  this.load.image('door', '/assets/door.png')
 }
 
 function create() {
-  const level = createMapWithKey(DIMENSIONS, MAX_TUNNELS, MAX_LENGTH)
-  const map = this.make.tilemap({
+  const level = createMapWithAssets(DIMENSIONS, MAX_TUNNELS, MAX_LENGTH)
+  map = this.make.tilemap({
     data: level,
     tileWidth: 32,
     tileHeight: 32
   })
   const tiles = map.addTilesetImage('tiles')
-  const worldLayer = map.createStaticLayer(0, tiles, 0, 0)
+  worldLayer = map.createStaticLayer(0, tiles, 0, 0)
   worldLayer.setCollision([1])
 
   // spawn chicken
@@ -62,6 +68,24 @@ function create() {
   chicken.flightCounters = null
   this.physics.add.collider(chicken, worldLayer)
 
+  // spawn door -- hidden
+  map.layers[0].data.forEach(array => {
+    array.forEach(tile => {
+      if (tile.index === 3) {
+        doorX = tile.pixelX
+        doorY = tile.pixelY
+        door = this.physics.add.sprite(doorX + 16, doorY + 16, 'door')
+      }
+    })
+  })
+  // make door collide with world
+  this.physics.add.collider(door, worldLayer)
+  // make door interactable with chicken
+  this.physics.add.overlap(chicken, door, exitDungeon, null, this)
+  // door hidden by default
+  door.disableBody(true, true)
+
+  // spawn eggs
   let eggX
   let eggY
   map.layers[0].data.forEach(array => {
@@ -69,15 +93,21 @@ function create() {
       if (tile.index === 2) {
         eggX = tile.pixelX
         eggY = tile.pixelY
-        eggSprite = this.physics.add.sprite(eggX + 16, eggY, 'egg')
+        eggSprite = this.physics.add.sprite(eggX + 16, eggY + 32, 'egg')
         eggs.push(eggSprite)
       }
     })
   })
+  // make eggs collide with world
+  this.physics.add.collider(eggs, worldLayer)
+  // make eggs collectable when touched
+  this.physics.add.overlap(chicken, eggs, collectEgg, null, this)
+
   const scoreBackground = this.add.graphics()
   scoreBackground.fillStyle(0x6c6159, 1)
-  scoreBackground.fillRect(256, 256, 1024, 20)
+  scoreBackground.fillRect(256, 256, 1024, 25)
   scoreBackground.setScrollFactor(0)
+  scoreBackground.z = 2
   createChickenAnimations(game)
 
   // score text
@@ -89,12 +119,6 @@ function create() {
   scoreText.scaleY = 0.5
   scoreText.fixedToCamera = true
   scoreText.setScrollFactor(0)
-
-  // find egg coords and spawn eggs
-  console.log(eggs.length)
-
-  this.physics.add.collider(eggs, worldLayer)
-  this.physics.add.overlap(chicken, eggs, collectEgg, null, this)
 
   // camera
   const camera = this.cameras.main
@@ -109,28 +133,33 @@ function update() {
   handleMovement(chicken, cursors)
 }
 
-function collectEgg(chicken, egg) {
+function collectEgg(chicken, egg, doorY) {
   egg.disableBody(true, true)
   totalScore += 1
   eggsCollected += 1
+  // check if all eggs have been collected
   if (eggsCollected === eggs.length) {
-    console.log(eggsCollected)
-    eggsCollected = 0
-    eggs = []
-    scoreText.setText('You did it!')
-
-    // stop all animations and start a new level
-    chicken.anims.stop(null, true)
-    chicken.anims.pause()
-    chicken.disableBody()
-    const cam = this.cameras.main
-    cam.fade(250, 0, 0, 0)
-    cam.once('camerafadeoutcomplete', () => {
-      this.scene.restart()
-    })
+    // spawn door
+    door.enableBody(null, doorX, doorY, true, true)
+    scoreText.setText('A way forward has appeared, Bawk!')
   } else {
     scoreText.setText('SCORE: ' + totalScore)
 
     console.log(eggsCollected)
   }
+}
+
+function exitDungeon() {
+  console.log(eggsCollected)
+  eggsCollected = 0
+  eggs = []
+  // stop all animations and start a new level
+  chicken.anims.stop(null, true)
+  chicken.anims.pause()
+  chicken.disableBody()
+  const cam = this.cameras.main
+  cam.fade(250, 0, 0, 0)
+  cam.once('camerafadeoutcomplete', () => {
+    this.scene.restart()
+  })
 }
