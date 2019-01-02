@@ -18,8 +18,7 @@ const config = {
     preload: preload,
     create: create,
     update: update
-  },
-  resolution: window.devicePixelRatio
+  }
 }
 const game = new Phaser.Game(config)
 const DIMENSIONS = 32
