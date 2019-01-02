@@ -30,6 +30,6 @@ export const handleMovement = (chicken, cursors) => {
     }
   }
   if (chicken.body.onFloor()) {
-    chicken.flightCounters = 2
+    chicken.flightCounters = 3
   }
 }
