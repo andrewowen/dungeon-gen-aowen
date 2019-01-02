@@ -47,6 +47,7 @@ function preload() {
   })
   this.load.image('egg', '/assets/egg.png')
   this.load.image('door', '/assets/door.png')
+  this.load.image('death-orb', '/assets/death-orb.png')
 }
 
 function create() {
@@ -103,6 +104,15 @@ function create() {
   // make eggs collectable when touched
   this.physics.add.overlap(chicken, eggs, collectEgg, null, this)
 
+  // spawn death orb
+  var death_orb = this.physics.add.sprite(400, 400, 'death-orb')
+  death_orb.setGravity(0, -300)
+  death_orb.setVelocity(100, 100)
+  death_orb.setDrag(0, 0)
+  death_orb.setBounce(1, 1)
+  this.physics.add.collider(death_orb, worldLayer)
+  this.physics.add.overlap(chicken, death_orb, hitOrb, null, this)
+
   const scoreBackground = this.add.graphics()
   scoreBackground.fillStyle(0x6c6159, 1)
   scoreBackground.fillRect(256, 256, 1024, 25)
@@ -147,6 +157,14 @@ function collectEgg(chicken, egg, doorY) {
 
     console.log(eggsCollected)
   }
+}
+
+function hitOrb(chicken) {
+  this.physics.pause()
+
+  chicken.setTint(0xff0000)
+  chicken.anims.play('stopped-left')
+  scoreText.setText('GAME OVER')
 }
 
 function exitDungeon() {
