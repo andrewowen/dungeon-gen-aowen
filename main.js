@@ -33,6 +33,8 @@ let totalScore = 0
 let scoreText
 let chicken
 let door = {}
+let doorX
+let doorY
 let eggs = []
 let eggSprite
 let cursors
@@ -66,6 +68,24 @@ function create() {
   chicken.flightCounters = null
   this.physics.add.collider(chicken, worldLayer)
 
+  // spawn door -- hidden
+  map.layers[0].data.forEach(array => {
+    array.forEach(tile => {
+      if (tile.index === 3) {
+        doorX = tile.pixelX
+        doorY = tile.pixelY
+        door = this.physics.add.sprite(doorX + 16, doorY + 16, 'door')
+      }
+    })
+  })
+  // make door collide with world
+  this.physics.add.collider(door, worldLayer)
+  // make door interactable with chicken
+  this.physics.add.overlap(chicken, door, exitDungeon, null, this)
+  // door hidden by default
+  door.disableBody(true, true)
+
+  // spawn eggs
   let eggX
   let eggY
   map.layers[0].data.forEach(array => {
@@ -78,11 +98,16 @@ function create() {
       }
     })
   })
+  // make eggs collide with world
+  this.physics.add.collider(eggs, worldLayer)
+  // make eggs collectable when touched
+  this.physics.add.overlap(chicken, eggs, collectEgg, null, this)
 
   const scoreBackground = this.add.graphics()
   scoreBackground.fillStyle(0x6c6159, 1)
-  scoreBackground.fillRect(256, 256, 1024, 20)
+  scoreBackground.fillRect(256, 256, 1024, 25)
   scoreBackground.setScrollFactor(0)
+  scoreBackground.z = 2
   createChickenAnimations(game)
 
   // score text
@@ -94,12 +119,6 @@ function create() {
   scoreText.scaleY = 0.5
   scoreText.fixedToCamera = true
   scoreText.setScrollFactor(0)
-
-  // find egg coords and spawn eggs
-  console.log(eggs.length)
-
-  this.physics.add.collider(eggs, worldLayer)
-  this.physics.add.overlap(chicken, eggs, collectEgg, null, this)
 
   // camera
   const camera = this.cameras.main
@@ -121,29 +140,13 @@ function collectEgg(chicken, egg, doorY) {
   // check if all eggs have been collected
   if (eggsCollected === eggs.length) {
     // spawn door
-    spawnDoor.apply(this)
+    door.enableBody(null, doorX, doorY, true, true)
     scoreText.setText('A way forward has appeared, Bawk!')
   } else {
     scoreText.setText('SCORE: ' + totalScore)
 
     console.log(eggsCollected)
   }
-}
-
-function spawnDoor() {
-  let doorX
-  let doorY
-  map.layers[0].data.forEach(array => {
-    array.forEach(tile => {
-      if (tile.index === 3) {
-        doorX = tile.pixelX
-        doorY = tile.pixelY
-        door = this.physics.add.sprite(doorX + 16, doorY + 16, 'door')
-        this.physics.add.collider(door, worldLayer)
-        this.physics.add.overlap(chicken, door, exitDungeon, null, this)
-      }
-    })
-  })
 }
 
 function exitDungeon() {
