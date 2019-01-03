@@ -30,6 +30,7 @@ let worldLayer
 let eggsCollected = 0
 let totalScore = 0
 let scoreText
+let restartButton
 let chicken
 let door = {}
 let doorX
@@ -112,6 +113,7 @@ function create() {
   this.physics.add.collider(death_orb, worldLayer)
   this.physics.add.overlap(chicken, death_orb, hitOrb, null, this)
 
+  // spawn ui bar
   const scoreBackground = this.add.graphics()
   scoreBackground.fillStyle(0x6c6159, 1)
   scoreBackground.fillRect(255, 670, 1024, 25)
@@ -158,8 +160,41 @@ function collectEgg(chicken, egg, doorY) {
   }
 }
 
-function hitOrb(chicken) {
+function hitOrb(chicken, camera) {
   this.physics.pause()
+  console.log(camera)
+  console.log(chicken)
+
+  // restart game
+  restartButton = this.add.text(512, 500, 'Restart →', {
+    font: '40px Space Mono',
+    fill: '#f00f00',
+    backgroundColor: '#ffffff'
+  })
+  restartButton.scaleX = 0.5
+  restartButton.scaleY = 0.5
+  restartButton.setOrigin(0.5, 0.5)
+  restartButton.setPadding(20, 20, 20, 20)
+  restartButton.fixedToCamera = true
+  restartButton.setScrollFactor(0)
+  restartButton.setInteractive()
+
+  // restart button action states
+  restartButton.on('pointerdown', () => {
+    console.log('restarting!')
+    // reset all stats
+    eggsCollected = 0
+    eggs = []
+    totalScore = 0
+    // reset Scene
+    resetScene.apply(this)
+  })
+  restartButton.on('pointerover', () => {
+    restartButton.setScale(0.6, 0.6)
+  })
+  restartButton.on('pointerout', () => {
+    restartButton.setScale(0.5, 0.5)
+  })
 
   chicken.setTint(0xff0000)
   chicken.anims.play('stopped-left')
@@ -174,6 +209,10 @@ function exitDungeon() {
   chicken.anims.stop(null, true)
   chicken.anims.pause()
   chicken.disableBody()
+  resetScene.apply(this)
+}
+
+function resetScene() {
   const cam = this.cameras.main
   cam.fade(250, 0, 0, 0)
   cam.once('camerafadeoutcomplete', () => {

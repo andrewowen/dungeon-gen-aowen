@@ -13,15 +13,17 @@ _Assets taken from Stardew Valley and are property of Concerned Ape_
   - Monsters (**TODO**)
 - ~Create Documentation~
 - Add in-game controls (**TODO**)
+- ~Fireballs (Death Orb)~
 
 # Future Features
 
 Things to come in future iterations:
 
-- Enemies
 - A final level
 - Level number tracking
-- Fireballs?
+- High Score Tracking
+- MORE ORBS
+- ES6 Refactor
 
 # Setup -- Development:
 
