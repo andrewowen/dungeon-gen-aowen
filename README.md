@@ -22,6 +22,7 @@ Things to come in future iterations:
 - A final level
 - Level number tracking
 - High Score Tracking
+- MORE ORBS
 - ES6 Refactor
 
 # Setup -- Development:
