@@ -23,7 +23,7 @@ Things to come in future iterations:
 - Level number tracking
 - High Score Tracking
 - MORE ORBS
-- ES6 Refactor
+- ES6 Refactor (Refactor scene into a Class so that other scenes can be added easily and modularized)
 
 # Setup -- Development:
 

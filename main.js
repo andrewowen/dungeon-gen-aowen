@@ -76,6 +76,7 @@ function create() {
         doorX = tile.pixelX
         doorY = tile.pixelY
         door = this.physics.add.sprite(doorX + 16, doorY + 16, 'door')
+        door.setTint(0xffffff)
       }
     })
   })
@@ -95,6 +96,7 @@ function create() {
         eggX = tile.pixelX
         eggY = tile.pixelY
         eggSprite = this.physics.add.sprite(eggX + 16, eggY + 32, 'egg')
+        eggSprite.setTint(Math.random() * 0xffffff)
         eggs.push(eggSprite)
       }
     })
@@ -110,8 +112,11 @@ function create() {
   death_orb.setVelocity(100, 100)
   death_orb.setDrag(0, 0)
   death_orb.setBounce(1, 1)
+  death_orb.setTint(0xff0000)
+  death_orb.setAlpha(0.7)
   this.physics.add.collider(death_orb, worldLayer)
   this.physics.add.overlap(chicken, death_orb, hitOrb, null, this)
+  console.log(death_orb)
 
   // spawn ui bar
   const scoreBackground = this.add.graphics()
