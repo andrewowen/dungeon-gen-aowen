@@ -1,12 +1,35 @@
 body {
   padding: 0;
   margin: 0;
+  background: #23262e;
+}
+
+#header-container {
+  background: #020303;
+  opacity: 0.6;
+  border-radius: 25px;
+  margin: 10px auto;
+  width: 1024px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20vh;
+}
+
+#header-text {
+  color: #ffffff;
+  font-family: 'Press Start 2P';
+}
+
+#header-text div {
+  margin-top: 10px;
 }
 
 #game-container {
   background: #23262e;
-  min-width: 100vw;
-  min-height: 100vh;
+  min-width: 720px;
+  max-height: 720px;
   display: flex;
   align-items: center;
   justify-content: center;

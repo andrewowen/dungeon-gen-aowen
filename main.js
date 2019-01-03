@@ -114,14 +114,14 @@ function create() {
 
   const scoreBackground = this.add.graphics()
   scoreBackground.fillStyle(0x6c6159, 1)
-  scoreBackground.fillRect(256, 256, 1024, 25)
+  scoreBackground.fillRect(255, 670, 1024, 25)
   scoreBackground.setScrollFactor(0)
   scoreBackground.z = 2
   createChickenAnimations(game)
 
   // score text
-  scoreText = this.add.text(260, 256, `SCORE: ${totalScore}`, {
-    font: '40px Ariel',
+  scoreText = this.add.text(260, 670, `SCORE: ${totalScore}`, {
+    font: '40px Space Mono',
     fill: '#fff'
   })
   scoreText.scaleX = 0.5
@@ -131,7 +131,7 @@ function create() {
 
   // camera
   const camera = this.cameras.main
-  camera.setBounds(0, -50, 1100, 1100)
+  camera.setBounds(0, -50, 1024, 1150)
   camera.setZoom(2)
   camera.startFollow(chicken)
 
