@@ -2,8 +2,6 @@
 
 A simple random dungeon generator example using PhaserJS.
 
-_Assets taken from Stardew Valley and are property of Concerned Ape (https://www.stardewvalley.net/)_
-
 # Goals:
 
 - Create a randomly generated dungeon layout with sensible rooms including
