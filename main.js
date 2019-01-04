@@ -21,22 +21,42 @@ const config = {
   }
 }
 const game = new Phaser.Game(config)
+// dimensions for game board creation
 const DIMENSIONS = 32
 const MAX_TUNNELS = 200
 const MAX_LENGTH = 5
 
+// number of default eggs and orbs to start with
+let maxEggs = 10
+let maxOrbs = 3
+
+// map and layer of map
 let map
 let worldLayer
+
+// default eggs collected and total score
 let eggsCollected = 0
 let totalScore = 0
+
+// init score text, restart button, chicken
 let scoreText
 let restartButton
 let chicken
+
+// init door and door coords
 let door = {}
 let doorX
 let doorY
-let eggs = []
+
+// init egg sprite and eggs array
 let eggSprite
+let eggs = []
+
+// init orb sprite and orbs array
+let orbSprite
+let orbs = []
+
+// init cursors for movement
 let cursors
 
 function preload() {
