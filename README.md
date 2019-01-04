@@ -27,7 +27,9 @@ Things to come in future iterations:
 
 # Setup -- Development:
 
-To get started, clone or down this repository. Then, from the root of the project, you can use something like `http-server` to start a simple local server. Once the server is started, you can view the app at `localhost:8080`
+To get started, clone or down this repository. Then, from the root of the project, run `npm run dev` to start the application. The app should start at `localhost:8080`.
+
+The project uses an npm package called `live-server` to host the app and utilizies live reloading on all JS, HTML, and CSS files. You can see the exact script in the package.json file
 
 # Production
 
