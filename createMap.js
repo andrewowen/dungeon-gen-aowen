@@ -62,13 +62,18 @@ export const generateMap = (dimensions, maxTunnels, maxLength) => {
   return map
 }
 
-export const createMapWithAssets = (dimensions, maxTunnels, maxLength) => {
+export const createMapWithAssets = (
+  dimensions,
+  maxTunnels,
+  maxLength,
+  maxEggs,
+  maxOrbs
+) => {
   let map = generateMap(dimensions, maxTunnels, maxLength)
   var currentRow
   var currentColumn
-  var max_eggs = 10
   // create egg spawn points
-  while (max_eggs > 0) {
+  while (maxEggs > 0) {
     do {
       currentRow = Math.floor(Math.random() * (map.length - 1))
       currentColumn = Math.floor(Math.random() * (map.length - 1))
@@ -76,7 +81,17 @@ export const createMapWithAssets = (dimensions, maxTunnels, maxLength) => {
       var spotBelowRandom = map[currentRow + 1][currentColumn]
     } while (randomSpot === 1 || spotBelowRandom === 0)
     map[currentRow][currentColumn] = 2
-    max_eggs--
+    maxEggs--
+  }
+  // create orb spawn points
+  while (maxOrbs > 0) {
+    do {
+      currentRow = Math.floor(Math.random() * (map.length - 1))
+      currentColumn = Math.floor(Math.random() * (map.length - 1))
+      var randomSpot = map[currentRow][currentColumn]
+    } while (randomSpot === 1 || currentRow < 10 || currentColumn < 10)
+    map[currentRow][currentColumn] = 4
+    maxOrbs--
   }
   // create door spawn point
   do {
@@ -84,7 +99,7 @@ export const createMapWithAssets = (dimensions, maxTunnels, maxLength) => {
     currentColumn = Math.floor(Math.random() * (map.length - 1))
     var randomSpot = map[currentRow][currentColumn]
     var spotBelowRandom = map[currentRow + 1][currentColumn]
-  } while (randomSpot === 1 || spotBelowRandom === 0 || spotBelowRandom === 2)
+  } while (randomSpot === 1 || [0, 2, 4].includes(spotBelowRandom))
   map[currentRow][currentColumn] = 3
   console.log(map)
   return map
