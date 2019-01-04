@@ -90,13 +90,14 @@ function create() {
   // spawn chicken
   chicken = this.physics.add.sprite(48, 48, 'chicken')
   chicken.isMovingLeft = false
-  chicken.setBounce(0.1)
   chicken.setCollideWorldBounds(true)
   chicken.flightCounters = null
   this.physics.add.collider(chicken, worldLayer)
 
+  let mapArray = map.layers[0].data
+
   // spawn door -- hidden
-  map.layers[0].data.forEach(array => {
+  mapArray.forEach(array => {
     array.forEach(tile => {
       if (tile.index === 3) {
         doorX = tile.pixelX
@@ -116,13 +117,12 @@ function create() {
   // spawn eggs
   let eggX
   let eggY
-  map.layers[0].data.forEach(array => {
+  mapArray.forEach(array => {
     array.forEach(tile => {
       if (tile.index === 2) {
         eggX = tile.pixelX
         eggY = tile.pixelY
         eggSprite = this.physics.add.sprite(eggX + 16, eggY + 32, 'egg')
-        eggSprite.setTint(Math.random() * 0xffffff)
         eggs.push(eggSprite)
       }
     })
