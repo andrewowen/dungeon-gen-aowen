@@ -21,22 +21,42 @@ const config = {
   }
 }
 const game = new Phaser.Game(config)
+// dimensions for game board creation
 const DIMENSIONS = 32
 const MAX_TUNNELS = 200
 const MAX_LENGTH = 5
 
+// number of default eggs and orbs to start with
+let maxEggs = 10
+let maxOrbs = 3
+
+// map and layer of map
 let map
 let worldLayer
+
+// default eggs collected and total score
 let eggsCollected = 0
 let totalScore = 0
+
+// init score text, restart button, chicken
 let scoreText
 let restartButton
 let chicken
+
+// init door and door coords
 let door = {}
 let doorX
 let doorY
-let eggs = []
+
+// init egg sprite and eggs array
 let eggSprite
+let eggs = []
+
+// init orb sprite and orbs array
+let orbSprite
+let orbs = []
+
+// init cursors for movement
 let cursors
 
 function preload() {
@@ -51,7 +71,13 @@ function preload() {
 }
 
 function create() {
-  const level = createMapWithAssets(DIMENSIONS, MAX_TUNNELS, MAX_LENGTH)
+  const level = createMapWithAssets(
+    DIMENSIONS,
+    MAX_TUNNELS,
+    MAX_LENGTH,
+    maxEggs,
+    maxOrbs
+  )
   map = this.make.tilemap({
     data: level,
     tileWidth: 32,
@@ -64,13 +90,14 @@ function create() {
   // spawn chicken
   chicken = this.physics.add.sprite(48, 48, 'chicken')
   chicken.isMovingLeft = false
-  chicken.setBounce(0.1)
   chicken.setCollideWorldBounds(true)
   chicken.flightCounters = null
   this.physics.add.collider(chicken, worldLayer)
 
+  let mapArray = map.layers[0].data
+
   // spawn door -- hidden
-  map.layers[0].data.forEach(array => {
+  mapArray.forEach(array => {
     array.forEach(tile => {
       if (tile.index === 3) {
         doorX = tile.pixelX
@@ -90,13 +117,12 @@ function create() {
   // spawn eggs
   let eggX
   let eggY
-  map.layers[0].data.forEach(array => {
+  mapArray.forEach(array => {
     array.forEach(tile => {
       if (tile.index === 2) {
         eggX = tile.pixelX
         eggY = tile.pixelY
         eggSprite = this.physics.add.sprite(eggX + 16, eggY + 32, 'egg')
-        eggSprite.setTint(Math.random() * 0xffffff)
         eggs.push(eggSprite)
       }
     })
@@ -107,23 +133,36 @@ function create() {
   this.physics.add.overlap(chicken, eggs, collectEgg, null, this)
 
   // spawn death orb
-  var death_orb = this.physics.add.sprite(400, 400, 'death-orb')
-  death_orb.setGravity(0, -300)
-  death_orb.setVelocity(100, 100)
-  death_orb.setDrag(0, 0)
-  death_orb.setBounce(1, 1)
-  death_orb.setTint(0xff0000)
-  death_orb.setAlpha(0.7)
-  this.physics.add.collider(death_orb, worldLayer)
-  this.physics.add.overlap(chicken, death_orb, hitOrb, null, this)
-  console.log(death_orb)
+
+  let orbX
+  let orbY
+  mapArray.forEach(array => {
+    array.forEach(tile => {
+      if (tile.index === 4) {
+        orbX = tile.pixelX
+        orbY = tile.pixelY
+        orbSprite = this.physics.add.sprite(orbX, orbY, 'death-orb')
+        orbSprite.setGravity(0, -300)
+        orbSprite.setVelocity(100, 100)
+        orbSprite.setDrag(0, 0)
+        orbSprite.setBounce(1, 1)
+        orbSprite.setTint(0xff0000)
+        orbSprite.setAlpha(0.7)
+        orbs.push(orbSprite)
+      }
+    })
+  })
+  // make orbs collide with world
+  this.physics.add.collider(orbs, worldLayer)
+  // makr orbs kill chicken when touched
+  this.physics.add.overlap(chicken, orbs, hitOrb, null, this)
+  console.log(orbs)
 
   // spawn ui bar
   const scoreBackground = this.add.graphics()
   scoreBackground.fillStyle(0x6c6159, 1)
   scoreBackground.fillRect(255, 670, 1024, 25)
   scoreBackground.setScrollFactor(0)
-  scoreBackground.z = 2
   createChickenAnimations(game)
 
   // score text
