@@ -71,7 +71,13 @@ function preload() {
 }
 
 function create() {
-  const level = createMapWithAssets(DIMENSIONS, MAX_TUNNELS, MAX_LENGTH)
+  const level = createMapWithAssets(
+    DIMENSIONS,
+    MAX_TUNNELS,
+    MAX_LENGTH,
+    maxEggs,
+    maxOrbs
+  )
   map = this.make.tilemap({
     data: level,
     tileWidth: 32,
