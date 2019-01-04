@@ -101,7 +101,6 @@ export const createMapWithAssets = (
     var spotBelowRandom = map[currentRow + 1][currentColumn]
   } while (randomSpot === 1 || [0, 2, 4].includes(spotBelowRandom))
   map[currentRow][currentColumn] = 3
-  console.log(map)
   return map
 }
 const chooseRandomDirection = (directions, lastDirection) => {

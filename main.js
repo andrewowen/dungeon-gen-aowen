@@ -155,7 +155,6 @@ function create() {
   this.physics.add.collider(orbs, worldLayer)
   // makr orbs kill chicken when touched
   this.physics.add.overlap(chicken, orbs, hitOrb, null, this)
-  console.log(orbs)
 
   // spawn ui bar
   const scoreBackground = this.add.graphics()
