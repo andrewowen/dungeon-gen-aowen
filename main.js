@@ -133,7 +133,6 @@ function create() {
   this.physics.add.overlap(chicken, eggs, collectEgg, null, this)
 
   // spawn death orb
-
   let orbX
   let orbY
   mapArray.forEach(array => {

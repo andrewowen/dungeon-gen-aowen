@@ -10,19 +10,18 @@ _Assets taken from Stardew Valley and are property of Concerned Ape_
   - ~A start and finish~
   - ~No inaccessible areas~
   - ~Items~
-  - Monsters (**TODO**)
+  - ~Monsters~
 - ~Create Documentation~
-- Add in-game controls (**TODO**)
+- ~Add in-game controls~
 - ~Fireballs (Death Orb)~
 
 # Future Features
 
 Things to come in future iterations:
 
-- A final level
 - Level number tracking
 - High Score Tracking
-- MORE ORBS
+- ~MORE ORBS~ **DONE**
 - ES6 Refactor (Refactor scene into a Class so that other scenes can be added easily and modularized)
 
 # Setup -- Development:
