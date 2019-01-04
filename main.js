@@ -133,23 +133,36 @@ function create() {
   this.physics.add.overlap(chicken, eggs, collectEgg, null, this)
 
   // spawn death orb
-  var death_orb = this.physics.add.sprite(400, 400, 'death-orb')
-  death_orb.setGravity(0, -300)
-  death_orb.setVelocity(100, 100)
-  death_orb.setDrag(0, 0)
-  death_orb.setBounce(1, 1)
-  death_orb.setTint(0xff0000)
-  death_orb.setAlpha(0.7)
-  this.physics.add.collider(death_orb, worldLayer)
-  this.physics.add.overlap(chicken, death_orb, hitOrb, null, this)
-  console.log(death_orb)
+
+  let orbX
+  let orbY
+  mapArray.forEach(array => {
+    array.forEach(tile => {
+      if (tile.index === 4) {
+        orbX = tile.pixelX
+        orbY = tile.pixelY
+        orbSprite = this.physics.add.sprite(orbX, orbY, 'death-orb')
+        orbSprite.setGravity(0, -300)
+        orbSprite.setVelocity(100, 100)
+        orbSprite.setDrag(0, 0)
+        orbSprite.setBounce(1, 1)
+        orbSprite.setTint(0xff0000)
+        orbSprite.setAlpha(0.7)
+        orbs.push(orbSprite)
+      }
+    })
+  })
+  // make orbs collide with world
+  this.physics.add.collider(orbs, worldLayer)
+  // makr orbs kill chicken when touched
+  this.physics.add.overlap(chicken, orbs, hitOrb, null, this)
+  console.log(orbs)
 
   // spawn ui bar
   const scoreBackground = this.add.graphics()
   scoreBackground.fillStyle(0x6c6159, 1)
   scoreBackground.fillRect(255, 670, 1024, 25)
   scoreBackground.setScrollFactor(0)
-  scoreBackground.z = 2
   createChickenAnimations(game)
 
   // score text
