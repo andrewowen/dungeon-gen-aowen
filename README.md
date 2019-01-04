@@ -2,7 +2,7 @@
 
 A simple random dungeon generator example using PhaserJS.
 
-_Assets taken from Stardew Valley and are property of Concerned Ape_
+_Assets taken from Stardew Valley and are property of Concerned Ape (https://www.stardewvalley.net/)_
 
 # Goals:
 
@@ -33,3 +33,7 @@ The project uses an npm package called `live-server` to host the app and utilizi
 # Production
 
 You can also view the latest stable build [here](https://egg-dungeon.netlify.com) (Hosted by Netlify)
+
+# Credits
+
+_Assets taken from Stardew Valley and are property of Concerned Ape (https://www.stardewvalley.net/)_
